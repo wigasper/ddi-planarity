@@ -1,0 +1,168 @@
+---
+title: "planar_eda"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/home/wkg/complex_mapping")
+library(tidyr)
+library(ggplot2)
+```
+
+
+```{r}
+data <- read.csv("helix_residue_prop_data.csv")
+t.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="helices", columns, na.rm=TRUE)
+```
+
+
+```{r}
+p <- ggplot(data, aes(helices, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x=expression("Proportion of Residues Involved in "*alpha*"-helices"), y="Density")
+p <- p + coord_cartesian(xlim=c(0, 0.75))
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("strand_residue_prop_data.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="strands", columns, na.rm=TRUE)
+```
+
+```{r}
+p <- ggplot(data, aes(strands, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x=expression("Proportion of Residues Involved in "*beta*"-strands"), y="Density")
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("num_repeats_by_planarity.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="repeats", columns, na.rm=TRUE)
+```
+
+```{r}
+
+p <- ggplot(data, aes(repeats, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x="Counts of Repeated Polypeptides", y="Density")
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("prop_repeats_by_planarity.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="prop_repeats", columns, na.rm=TRUE)
+```
+
+```{r}
+
+p <-ggplot(data, aes(prop_repeats, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x="Proportions of Repeated Polypeptides", y="Density")
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("pct_essentiality_by_planarity.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="pct_essentiality", columns, na.rm=TRUE)
+```
+
+```{r}
+ggplot(data, aes(pct_essentiality, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x="", y="Density")
+p + scale_fill_discrete(name="Group", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("hydrophobicity_by_planarity.csv")
+t.test(data$planars, data$nonplanars)
+
+```
+```{r}
+var.test(data$planars, data$nonplanars, alternative="two.sided")
+#s1 <- var(data$planars)
+#s2 <- var(data$nonplanars, na.rm=TRUE)
+#alpha = 0.05
+
+#qf(1 - (alpha / 2), df1=(n2-1), df2=(n1-1))
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="hydrophobicity", columns, na.rm=TRUE)
+```
+
+```{r}
+
+p <- ggplot(data, aes(hydrophobicity, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.65)
+p <- p + labs(x="Mean Hydrophobicity (relative to glycine)", y="Density")
+p <- p + coord_cartesian(xlim=c(0, 0.4))
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("binding_affinity/binding_aff_by_planarity.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="binding_aff", columns, na.rm=TRUE)
+```
+
+```{r}
+p <- ggplot(data, aes(binding_aff, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.6)
+p <- p + labs(x=expression(paste("Predicted ",Delta,"G (kcal/mol"^-1,")")), y="Density")
+p <- p + coord_cartesian(xlim=c(-550, 0))
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+data <- read.csv("residue_counts_by_planarity.csv")
+wilcox.test(data$planars, data$nonplanars)
+columns <- c(1,2)
+data <- data %>% gather(key="planarity", value="residue_count", columns, na.rm=TRUE)
+```
+
+```{r}
+p <- ggplot(data, aes(residue_count, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.6)
+p <- p + labs(x="Complex Size (residue count)", y="Density")
+#p <- p + coord_cartesian(xlim=c(-550, 0))
+p + scale_fill_discrete(name="", breaks=c("nonplanars", "planars"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+sdfklj
+
+```{r}
+size_data <- read.csv("complex_size_domains_edges.csv")
+```
+
+```{r}
+p <- ggplot(size_data, aes(size_in_residues, num_unique_domains, color=planarity))
+p <- p + geom_point(alpha=0.8)
+p <- p + labs(x="Complex Size (residue count)", y="Number of Unique Domains")
+#p
+p + scale_color_discrete(name="Planarity", breaks=c("nonplanar", "planar"), labels=c("Nonplanar","Planar")) #+ guides(color=FALSE)
+```
+```{r}
+p <- ggplot(size_data, aes(num_unique_domains, color=factor(planarity), fill=factor(planarity))) + geom_density(alpha=.6)
+p <- p + labs(x="num_unique_domains", y="Density")
+#p <- p + coord_cartesian(xlim=c(-550, 0))
+p + scale_fill_discrete(name="", breaks=c("nonplanar", "planar"), labels=c("Nonplanar","Planar")) + guides(color=FALSE)
+```
+
+```{r}
+p <- ggplot(size_data, aes(size_in_residues, num_interactions, color=planarity))
+p <- p + geom_point(alpha=0.8)
+p <- p + labs(x="Complex Size (residue count)", y="Number of Unique Domain-Domain Interactions")
+#p
+p + scale_color_discrete(name="Planarity", breaks=c("nonplanar", "planar"), labels=c("Nonplanar","Planar")) 
+```
+
+```{r}
+p <- ggplot(size_data, aes(num_unique_domains, num_interactions, color=planarity))
+p <- p + geom_point(alpha=0.8)
+p <- p + labs(x="Number of Unique Domains", y="Number of Unique Domain-Domain Interactions")
+#p
+p + scale_color_discrete(name="Planarity", breaks=c("nonplanar", "planar"), labels=c("Nonplanar","Planar")) 
+```
